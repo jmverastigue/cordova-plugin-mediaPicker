@@ -88,6 +88,12 @@
     [[PHImageManager defaultManager] requestImageDataForAsset:asset  options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
         if(imageData != nil) {
             NSString *filename=[asset valueForKey:@"filename"];
+
+            UIImage* image = nil;
+            image=[UIImage imageWithData:imageData];
+            image = [image imageCorrectedForCaptureOrientation];
+            imageData = UIImageJPEGRepresentation(image, 1);
+
             if ([filename hasSuffix:@".HEIC"]) {
                 imageData = UIImageJPEGRepresentation([UIImage imageWithData:imageData], 1);
                 filename = [filename stringByReplacingOccurrencesOfString:@".HEIC" withString:@".JPG"];
