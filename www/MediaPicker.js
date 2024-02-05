@@ -37,6 +37,9 @@ var MediaPicker = {
     },
     getFileInfo:function(path, argType, success, error) { //type:"path"  or "uri"
         exec(success, error, "MediaPicker", "getFileInfo", [path,argType]);
+    },
+    writeFileToExternalCacheDir: function(successCallback, errorCallback, path) {
+        cordova.exec(successCallback, errorCallback, "MediaPicker", "writeFileToExternalCacheDir", [path]);
     }
 };
 
