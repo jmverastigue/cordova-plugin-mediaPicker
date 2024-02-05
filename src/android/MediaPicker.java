@@ -246,6 +246,13 @@ public class MediaPicker extends CordovaPlugin {
                 jsonObject.put("size", file.length());
                 jsonObject.put("name", file.getName());
                 callbackContext.success(jsonObject);
+            }else if (uri.contains("/sdcard")){ //compress for sd card regardless so that we are able to store in accessible storage
+                File file = compressImage(path, 100);
+                jsonObject.put("path", file.getPath());
+                jsonObject.put("uri", Uri.fromFile(new File(file.getPath())));
+                jsonObject.put("size", file.length());
+                jsonObject.put("name", file.getName());
+                callbackContext.success(jsonObject);
             }else {
                 callbackContext.success(jsonObject);
             }
@@ -295,40 +302,6 @@ public class MediaPicker extends CordovaPlugin {
             e.printStackTrace();
         }
         return  file;
-    }
-
-    public void writeFileToExternalCacheDir(String sourcePath, CallbackContext callbackContext) {
-        this.callback = callbackContext;
-        try {
-            File sourceFile = new File(sourcePath);
-            String fileName = "dmcMediaPicker_" + System.currentTimeMillis();
-            File destFile = new File(cordova.getActivity().getExternalCacheDir(), fileName);
-
-            copyFile(sourceFile, destFile);
-
-            //details needed - following compressImage format
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("path", destFile.getPath());
-            jsonObject.put("uri", Uri.fromFile(destFile));
-            jsonObject.put("size", destFile.length());
-            jsonObject.put("name", destFile.getName());
-            callbackContext.success(jsonObject);
-        } catch (Exception e) {
-            callbackContext.error("Error occurred: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
-    private void copyFile(File sourceFile, File destFile) throws IOException {
-        FileInputStream inputStream = new FileInputStream(sourceFile);
-        FileOutputStream outputStream = new FileOutputStream(destFile);
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = inputStream.read(buffer)) > 0) {
-            outputStream.write(buffer, 0, length);
-        }
-        inputStream.close();
-        outputStream.close();
     }
 
     public  int getBitmapRotate(String path) {
