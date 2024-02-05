@@ -109,6 +109,8 @@ public class MediaPicker extends CordovaPlugin {
                 ArrayList<Media> select= new ArrayList<Media>();
                 JSONArray jsonArray=jsonObject.getJSONArray("defaultSelectedList");
                 for(int i=0;i<jsonArray.length();i++){
+                    String path =jsonArray.getString("path")[i];
+                    Log.i("media-object-string", path); 
                     select.add(new Media(jsonArray.getString(i), "", 0, 0,0,0,""));
                 }
                 intent.putExtra(PickerConfig.DEFAULT_SELECTED_LIST,select); // (Optional)
