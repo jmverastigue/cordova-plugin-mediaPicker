@@ -246,12 +246,14 @@ public class MediaPicker extends CordovaPlugin {
                 jsonObject.put("size", file.length());
                 jsonObject.put("name", file.getName());
                 callbackContext.success(jsonObject);
-            }else (uri.contains("/sdcard")){ //compress for sd card regardless so that we are able to store in accessible storage
+            }else if (uri.contains("/sdcard")){ //compress for sd card regardless so that we are able to store in accessible storage
                 File file = compressImage(path, 100);
                 jsonObject.put("path", file.getPath());
                 jsonObject.put("uri", Uri.fromFile(new File(file.getPath())));
                 jsonObject.put("size", file.length());
                 jsonObject.put("name", file.getName());
+                callbackContext.success(jsonObject);
+            }else {
                 callbackContext.success(jsonObject);
             }
         } catch (Exception e) {
